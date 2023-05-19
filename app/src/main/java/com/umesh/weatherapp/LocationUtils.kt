@@ -11,6 +11,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlin.coroutines.resume
 
 suspend fun FusedLocationProviderClient.awaitLastLocation(context: Context): Location? =
+
     suspendCancellableCoroutine { continuation ->
         val permission = Manifest.permission.ACCESS_FINE_LOCATION
 
