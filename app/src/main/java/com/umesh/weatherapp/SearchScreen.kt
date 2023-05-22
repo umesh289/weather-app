@@ -1,6 +1,7 @@
 package com.umesh.weatherapp
 
 import android.Manifest
+import android.location.Location
 import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -110,17 +111,21 @@ fun SearchScreen(weatherViewModel: WeatherViewModel,
         } else {
             LaunchedEffect(Unit) {
                 try {
-                    val location = withContext(Dispatchers.IO) {
-                        fusedLocationClient.awaitLastLocation(weatherViewModel.context)
+                    withContext(Dispatchers.IO) {
+
+                        LocationInterop.getLastLocation(fusedLocationClient, weatherViewModel.context, object : LocationInterop.LocationCallback {
+                            override fun onLocationReceived(location: Location) {
+                                val latitude = location.latitude
+                                val longitude = location.longitude
+                                weatherViewModel.searchWeatherByLocation(latitude, longitude, apiKey)
+                            }
+
+                            override fun onLocationError(exception: Exception) {
+                                Log.d("Location", "Could not get location: ${exception.message}")
+                            }
+                        })
                     }
 
-                    if (location != null) {
-                        val latitude = location.latitude
-                        val longitude = location.longitude
-                        weatherViewModel.searchWeatherByLocation(latitude, longitude, apiKey)
-                    } else {
-                        Log.d("Location", "Could not get location")
-                    }
                 } catch (exception: SecurityException) {
                     Log.e("SearchScreen", "SecurityException: ${exception.message}")
                 } catch (exception: Exception) {

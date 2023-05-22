@@ -21,6 +21,7 @@ class WeatherViewModel(public val context: Context, private val weatherRepositor
             fetchedByLocation = false
             val weather = weatherRepository.getWeatherByCityName(cityName, apiKey)
             _weatherResponse.value = weather
+            Log.d("WeatherViewModel", weather.toString())
         }
     }
 
