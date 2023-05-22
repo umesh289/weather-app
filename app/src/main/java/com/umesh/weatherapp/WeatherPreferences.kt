@@ -5,7 +5,7 @@ import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 
 class WeatherPreferences(context: Context) {
-    private val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    var sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
     var lastSearchedCity: String?
         get() = sharedPreferences.getString(KEY_LAST_SEARCHED_CITY, null)
@@ -16,6 +16,6 @@ class WeatherPreferences(context: Context) {
         }
 
     companion object {
-        private const val KEY_LAST_SEARCHED_CITY = "last_searched_city"
+        const val KEY_LAST_SEARCHED_CITY = "last_searched_city"
     }
 }
